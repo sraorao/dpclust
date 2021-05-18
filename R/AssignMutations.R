@@ -387,13 +387,14 @@ multiDimensionalClustering = function(mutation.copy.number, copyNumberAdjustment
   no.iters = opts$no.iters
   burn.in = opts$no.iters.burn.in
   new_output_folder = opts$outdir
+  resolution = ifelse(is.null(opts$resolution), NA, opts$resolution)
   
   post.burn.in.start = burn.in
   no.subsamples = length(subsamples)
   no.muts = nrow(mutation.copy.number)
   
   # Get multi-D density
-  density.out = Gibbs.subclone.density.est.nd(mutation.copy.number/copyNumberAdjustment,GS.data,density.smooth,burn.in+1,no.iters,max.burden = 1.5)
+  density.out = Gibbs.subclone.density.est.nd(mutation.copy.number/copyNumberAdjustment,GS.data,density.smooth,burn.in+1,no.iters,max.burden = 1.5, resolution)
   
   range = density.out$range
   gridsize = density.out$gridsize

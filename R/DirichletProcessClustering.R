@@ -84,7 +84,7 @@ make_cna_params = function() {
 #' @param mutphasingfiles Mutation phasing files - currently unsupported (Default: NULL)
 #' @author sd11
 #' @export
-RunDP <- function(analysis_type, run_params, sample_params, advanced_params, outdir, cna_params=NULL, mutphasingfiles=NULL) { 
+RunDP <- function(analysis_type, run_params, sample_params, advanced_params, outdir, cna_params=NULL, mutphasingfiles=NULL, resolution = NA) { 
   
   #####################################################################################
   # Unpack parameters
@@ -270,7 +270,8 @@ RunDP <- function(analysis_type, run_params, sample_params, advanced_params, out
                                             cluster_conc=cluster_conc,
                                             mut.assignment.type=mut.assignment.type,
                                             most.similar.mut=most.similar.mut,
-                                            max.considered.clusters=max.considered.clusters)
+                                            max.considered.clusters=max.considered.clusters,
+                                            resolution = resolution)
     
   } else if (analysis_type == "replot_1d") {
     print("Running Remaking plots...")
@@ -777,7 +778,7 @@ flatten_3d_to_2d = function(data, col_names) {
 #' @param mutationTypes Vector with mutation types, used for plotting
 #' @param max.considered.clusters Maximum number of clusters to consider
 #' @author sd11
-DirichletProcessClustering <- function(mutCount, WTCount, totalCopyNumber, copyNumberAdjustment, mutation.copy.number, cellularity, output_folder, no.iters, no.iters.burn.in, subsamplesrun, samplename, conc_param, cluster_conc, mut.assignment.type, most.similar.mut, mutationTypes, max.considered.clusters) {
+DirichletProcessClustering <- function(mutCount, WTCount, totalCopyNumber, copyNumberAdjustment, mutation.copy.number, cellularity, output_folder, no.iters, no.iters.burn.in, subsamplesrun, samplename, conc_param, cluster_conc, mut.assignment.type, most.similar.mut, mutationTypes, max.considered.clusters, resolution = NA) {
 
     if(!file.exists(output_folder)){
     dir.create(output_folder)
@@ -817,7 +818,7 @@ DirichletProcessClustering <- function(mutCount, WTCount, totalCopyNumber, copyN
     
     # Assign mutations to clusters using one of the different assignment methods
     print("Assigning mutations to clusters...")
-    opts = list(samplename=samplename, subsamplenames=subsamplesrun, no.iters=no.iters, no.iters.burn.in=no.iters.burn.in, no.iters.post.burn.in=no.iters-no.iters.burn.in, outdir=output_folder)
+    opts = list(samplename=samplename, subsamplenames=subsamplesrun, no.iters=no.iters, no.iters.burn.in=no.iters.burn.in, no.iters.post.burn.in=no.iters-no.iters.burn.in, outdir=output_folder, resolution = resolution)
     if (mut.assignment.type == 1) {
       consClustering = multiDimensionalClustering(mutation.copy.number=mutation.copy.number, 
                                                   copyNumberAdjustment=copyNumberAdjustment, 
